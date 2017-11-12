@@ -34,16 +34,16 @@ The goals / steps of this project are the following:
 
 You're reading it! 
 
-I have implemented LeNet, ResNet, and Inception net for this project, but I did not find a stable Inception net architecture for this project, therefore here I only list the project code link and test result with various data pre-processing and data augmentation combination for LeNet and ResNet. Please be caustious that you need Tensorflow 1.3 to run them.
+I have implemented LeNet, ResNet, and Inception net for this project, but I did not find a stable Inception net architecture for this project, therefore here I only list the project code link and test result with various data pre-processing and data augmentation combinations for LeNet and ResNet. Please be caustious that you need Tensorflow 1.3 to run them.
 
 | NN model type | Data pre-processing | Data augmentation | Project Code	| Training accuracy | Validation accuracy | Test accuracy |
 |:-------------:|:-------------------:|:-----------------:|:------------:|:-----------------:|:-------------------:|:-------------:| 
-| LeNet | No | PCA color augmentation | [LeNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/51cc84db07623d89c549121c23b75f856edc2248/Traffic_Sign_Classifier.ipynb)	| 0.994 | 0.975 | 0.956 |
-| LeNet | Input normalization | PCA color augmentation | [LeNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/444ed68f5feba08c2fdc21bc0d1bef69bc209b7c/Traffic_Sign_Classifier.ipynb)	| 0.994 | 0.979 | 0.951 |
-| ResNet | No | PCA color augmentation | [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb)	| 0.998 | 0.985 | 0.976 |
-| ResNet | Input Normalization | PCA color augmentation | [ResNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/afac1af269188e5fa60c6d8ab50477469f663851/Traffic_Sign_Classifier.ipynb)	| 0.998 | 0.986 | 0.980 |
+| LeNet | No | PCA color augmentation | [LeNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/51cc84db07623d89c549121c23b75f856edc2248/Traffic_Sign_Classifier.ipynb)	| 99.4% | 97.5% | 95.6% |
+| LeNet | Input normalization | PCA color augmentation | [LeNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/444ed68f5feba08c2fdc21bc0d1bef69bc209b7c/Traffic_Sign_Classifier.ipynb)	| 99.4% | 97.9% | 95.1% |
+| ResNet | No | PCA color augmentation | [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb)	| 99.8% | 98.5% | 97.6% |
+| ResNet | Input Normalization | PCA color augmentation | [ResNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/afac1af269188e5fa60c6d8ab50477469f663851/Traffic_Sign_Classifier.ipynb)	| 99.8% | 98.6% | 98.0% |
 
-BTW, I also implemented a [LeNet](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb) in Tensorflow 0.12. It just passes the validation accuracy requirement of the project rubrics, and I did not pay as much attention on it as on the other ones listed in the table above. And this project report is also a summary of the ones in the table instead of the basic LeNet implememented in Tensorflow 0.12.
+BTW, I also implemented a [LeNet in Tensorflow 0.12](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb). It just passes the validation accuracy requirement of the project rubrics, and I did not pay as much attention on it as on the other ones listed in the table above. This project report is also a summary of the ones in the table instead of the basic LeNet implememented in Tensorflow 0.12.
 
 ### Data Set Summary & Exploration
 
@@ -59,7 +59,7 @@ I used the numpy library to calculate summary statistics of the traffic signs da
 
 #### 2. Include an exploratory visualization of the dataset.
 
-First, I showed each a sample picture of each label class from the training set. You can check details in any project code in the table on the top. By doing so, I got an rough idea of what these images look like.
+First, I showed a sample picture of each label class from the training set. You can check details in any project code in the table on the top. By doing so, I got an rough idea of what these images look like.
 Second, I gathered the distribution of label class on training set, validation set, and test set, which almost share a same distribution.
 
 ![alt text][image1]
@@ -71,26 +71,16 @@ Second, I gathered the distribution of label class on training set, validation s
 
 #### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I decided to convert the images to grayscale because ...
+For data pre-processing, I only tried one technique **input normalization**. The udacity lecture, this [StackExchange question](https://stats.stackexchange.com/questions/211436/why-do-we-normalize-images-by-subtracting-the-datasets-image-mean-and-not-the-c) and [CS231n of Stanford](http://cs231n.github.io/neural-networks-2/#datapre) all mention that **input normalization** is a necessary step of image recognition task, which helps control the gradients as well as the feature value in an effective range, as they all share the same weights and biases of the neural network. I do the input normalization in the common way that for all images in training, validation, and test sets, I use the mean and standard deviation of training set images to subract and divide. 
 
-Here is an example of a traffic sign image before and after grayscaling.
+For data augmentation, I tried the **PCA color augmentation** idea mentioned in [AlexNet paper](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf). According to my understanding, I computed the eigenvectors and eigenvalues of the 3x3 RGB channel covariance matrix for each image in training set, and then "add multiples of the found principal components, with magnitudes proportional to the corresponding eignevalues times a random variable drawn from a Gaussian with mean zero and standard deviation 0.1". The PCA color augmentation strengthens or weakends the color feature of the image, which is very suitable for the traffic sign classifier task. In addition, I implemented a **multithread data loading pipeline** which does the PCA color augmentation for the next mini-batches of training data by a CPU thread, and in the meantime let GPU thread execute the training. Namely, no additional compuation cost on GPU is added, so the training time is not increased due to data augmentation. The pipeline is like this: training data loading(CPU) -> PCA color augmentation(CPU) -> Enqueue(CPU) -> Dequeue(CPU) -> Train model(GPU)
 
-![alt text][image2]
+I did not try the affine transformation for data pre-processing or data augmentation for following reasons:
+* For comparing different models, I spent most of my time on reading papers, implementing models, and other supporting techniques, like the multithread data loading pipeline, so I do not have enough time to try out these image processing techniques which I have already tried in the lane line finding project.
+* Some of the affine transformations are not suitable for traffic sign recognition task, e.g. flip(mirror) could not be used in this case, because most mirror of the traffic signs are not traffic signs any more.
+* Sophisticated data pre-processing should be avoided as much as possible, so that the model could be deployed to production more easily. Namely when the model is used to classify real traffic sign, it does not need to do the same data pre-processing steps before input into model, which could save cost of the classifier. According to my test result, [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb) already achieves a test accuracy of 97.6%, which is a qualified example without any data pre-processing steps required.
 
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
-
-
-####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+#### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 My final model consisted of the following layers:
 
