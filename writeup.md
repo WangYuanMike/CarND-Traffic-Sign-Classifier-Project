@@ -18,8 +18,8 @@ The goals / steps of this project are the following:
 [image1]: ./examples/train_distribution.png "train distribution"
 [image2]: ./examples/validation_distribution.png "validation distribution"
 [image3]: ./examples/test_distribution.png "test distribution"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
+[image4]: ./examples/original.png "original image"
+[image5]: ./examples/pca.png "pca augmented image"
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
@@ -75,6 +75,14 @@ For data pre-processing, I only tried one technique **input normalization**. The
 
 For data augmentation, I tried the **PCA color augmentation** idea mentioned in [AlexNet paper](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf). According to my understanding, I computed the eigenvectors and eigenvalues of the 3x3 RGB channel covariance matrix for each image in training set, and then "add multiples of the found principal components, with magnitudes proportional to the corresponding eignevalues times a random variable drawn from a Gaussian with mean zero and standard deviation 0.1". The PCA color augmentation strengthens or weakends the color feature of the image, which is very suitable for the traffic sign classifier task. In addition, I implemented a **multithread data loading pipeline** which does the PCA color augmentation for the next mini-batches of training data by a CPU thread, and in the meantime let GPU thread execute the training. Namely, no additional compuation cost on GPU is added, so the training time is not increased due to data augmentation. The pipeline is like this: training data loading(CPU) -> PCA color augmentation(CPU) -> Enqueue(CPU) -> Dequeue(CPU) -> Train model(GPU)
 
+**Original image**
+
+![alt text][image4]
+
+**PCA color augmented image**
+
+![alt text][image5]
+
 I did not try the affine transformation for data pre-processing or data augmentation for following reasons:
 * For comparing different models, I spent most of my time on reading papers, implementing models, and other supporting techniques, like the multithread data loading pipeline, so I do not have enough time to try out these image processing techniques which I have already tried in the lane line finding project.
 * Some of the affine transformations are not suitable for traffic sign recognition task, e.g. flip(mirror) could not be used in this case, because most mirror of the traffic signs are not traffic signs any more.
@@ -82,20 +90,51 @@ I did not try the affine transformation for data pre-processing or data augmenta
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-My final model consisted of the following layers:
+My final **LeNet model** consists of the following layers:
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+| Layer         		         |     Description	        					                 | 
+|:------------------------:|:---------------------------------------------:| 
+| Input         		         | 32x32x3 RGB image   							                   | 
+| Convolution 5x5     	    | 1x1 stride, valid padding, outputs 28x28x6  	 |
+| ReLU                     |                                               |
+| Batch Normalization      |                                               |
+| Max pooling 2x2          | 2x2 stride, outputs 14x14x6                   |
+| Convolution 5x5     	    | 1x1 stride, valid padding, outputs 10x10x16 	 |
+| ReLU                     |                                               |
+| Batch Normalization      |                                               |
+| Max pooling 2x2          | 2x2 stride, outputs 5x5x16                    |
+| Flatten                  | outputs 400                                   |
+| Fully Connected          | outputs logits of 43 classes                  |
+| Softmax                  | outputs softmax probablity of 43 classes      |
+
+
+My final [ResNet model](https://arxiv.org/pdf/1512.03385.pdf) consists of the following layers:
+
+| Layer         		         |     Description	        					                 | 
+|:------------------------:|:---------------------------------------------:| 
+| Input         		         | 32x32x3 RGB image   							                   | 
+| Convolution 3x3     	    | 1x1 stride, same padding, outputs 32x32x16 	  |
+| Residual module x 2      | 3x3 stride, outputs 32x32x16                  |
+| Residual module x 2      | 3x3 stride, outputs 16x16x32                  |
+| Residual module x 2      | 3x3 stride, outputs 8x8x64                    |
+| Global average pooling   | outputs 1x1x64                                |
+| Fully Connected          | outputs logits of 43 classes                  |
+| Softmax                  | outputs softmax probablity of 43 classes      |
+
+Roughly, **Residual module** consists of the following layers:
+
+| Layer         		         |     Description	        					                 | 
+|:------------------------:|:---------------------------------------------:| 
+| Input     	              | The "x" in the last step 	                    |
+| Convolution 3x3     	    | same padding                              	   |
+| Batch Normalization      |                                               |
+| ReLU                     |                                               |
+| Dropout                  | Dropout rate 0.5                              |
+| Convolution 3x3          | same padding, 1x1 strides,                    |
+| Batch Normalization      | Output F(x)                                   |
+| H(x) = F(x) + x          | outputs softmax probablity of 43 classes      |
+
+
 
 
 ####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
