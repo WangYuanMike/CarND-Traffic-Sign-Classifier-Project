@@ -15,9 +15,9 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
+[image1]: ./examples/train_distribution.png "train distribution"
+[image2]: ./examples/validation_distribution.png "validation distribution"
+[image3]: ./examples/test_distribution.png "test distribution"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
 [image5]: ./examples/placeholder.png "Traffic Sign 2"
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
@@ -25,37 +25,51 @@ The goals / steps of this project are the following:
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-###Writeup / README
+### Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+You're reading it! 
 
-###Data Set Summary & Exploration
+I have implemented LeNet, ResNet, and Inception net for this project, but I did not find a stable Inception net architecture for this project, therefore here I only list the project code link and test result with various data pre-processing and data augmentation combination for LeNet and ResNet. Please be caustious that you need Tensorflow 1.3 to run them.
 
-####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
+| NN model type | Data pre-processing | Data augmentation | Project Code	| Training accuracy | Validation accuracy | Test accuracy |
+|:-------------:|:-------------------:|:-----------------:|:------------:|:-----------------:|:-------------------:|:-------------:| 
+| LeNet | No | PCA color augmentation | [LeNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/51cc84db07623d89c549121c23b75f856edc2248/Traffic_Sign_Classifier.ipynb)	| 0.994 | 0.975 | 0.956 |
+| LeNet | Input normalization | PCA color augmentation | [LeNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/444ed68f5feba08c2fdc21bc0d1bef69bc209b7c/Traffic_Sign_Classifier.ipynb)	| 0.994 | 0.979 | 0.951 |
+| ResNet | No | PCA color augmentation | [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb)	| 0.998 | 0.985 | 0.976 |
+| ResNet | Input Normalization | PCA color augmentation | [ResNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/afac1af269188e5fa60c6d8ab50477469f663851/Traffic_Sign_Classifier.ipynb)	| 0.998 | 0.986 | 0.980 |
 
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
+BTW, I also implemented a [LeNet](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb) in Tensorflow 0.12. It just passes the validation accuracy requirement of the project rubrics, and I did not pay as much attention on it as on the other ones listed in the table above. And this project report is also a summary of the ones in the table instead of the basic LeNet implememented in Tensorflow 0.12.
 
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+### Data Set Summary & Exploration
 
-####2. Include an exploratory visualization of the dataset.
+#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+I used the numpy library to calculate summary statistics of the traffic signs data set:
+
+* The size of training set is 34799
+* The size of the validation set is 4410
+* The size of test set is 12630
+* The shape of a traffic sign image is (32, 32, 3)
+* The number of unique classes/labels in the data set is 43
+
+#### 2. Include an exploratory visualization of the dataset.
+
+First, I showed each a sample picture of each label class from the training set. You can check details in any project code in the table on the top. By doing so, I got an rough idea of what these images look like.
+Second, I gathered the distribution of label class on training set, validation set, and test set, which almost share a same distribution.
 
 ![alt text][image1]
+![alt text][image2]
+![alt text][image3]
 
-###Design and Test a Model Architecture
 
-####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
+### Design and Test a Model Architecture
+
+#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
 As a first step, I decided to convert the images to grayscale because ...
 
