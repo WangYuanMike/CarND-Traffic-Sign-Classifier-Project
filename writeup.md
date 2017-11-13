@@ -71,9 +71,9 @@ Second, I gathered the distribution of label class on training set, validation s
 
 #### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-For data pre-processing, I only tried one technique **input normalization**. The udacity lecture, this [StackExchange question](https://stats.stackexchange.com/questions/211436/why-do-we-normalize-images-by-subtracting-the-datasets-image-mean-and-not-the-c) and [CS231n of Stanford](http://cs231n.github.io/neural-networks-2/#datapre) all mention that **input normalization** is a necessary step of image recognition task, which helps control the gradients as well as the feature value in an effective range, as they all share the same weights and biases of the neural network. I do the input normalization in the common way that for all images in training, validation, and test sets, I use the mean and standard deviation of training set images to subract and divide. 
+For **data pre-processing**, I only tried one technique **input normalization**. The udacity lecture, this [StackExchange question](https://stats.stackexchange.com/questions/211436/why-do-we-normalize-images-by-subtracting-the-datasets-image-mean-and-not-the-c) and [CS231n of Stanford](http://cs231n.github.io/neural-networks-2/#datapre) all mention that **input normalization** is a necessary step of image recognition task, which helps control the gradients as well as the feature value in an effective range, as they all share the same weights and biases of the neural network. I do the input normalization in the common way that for all images in training, validation, and test sets, I use the mean and standard deviation of training set images to subract and divide. 
 
-For data augmentation, I tried the **PCA color augmentation** idea mentioned in [AlexNet paper](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf). According to my understanding, I computed the eigenvectors and eigenvalues of the 3x3 RGB channel covariance matrix for each image in training set, and then "add multiples of the found principal components, with magnitudes proportional to the corresponding eignevalues times a random variable drawn from a Gaussian with mean zero and standard deviation 0.1". The PCA color augmentation strengthens or weakens the color feature of the image, while it keeps the patten and distribution of the training image. In addition, I implemented a **multithread data loading pipeline** which does the PCA color augmentation for the next mini-batches of training data by a CPU thread, and in the meantime let GPU thread execute the training. Namely, no additional compuation cost on GPU is added, so the training time is not increased due to data augmentation. The pipeline is like this: training data loading(CPU) -> PCA color augmentation(CPU) -> Enqueue(CPU) -> Dequeue(CPU) -> Train model(GPU)
+For **data augmentation**, I tried the **PCA color augmentation** idea mentioned in [AlexNet paper](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf). According to my understanding, I computed the eigenvectors and eigenvalues of the 3x3 RGB channel covariance matrix for each image in training set, and then "add multiples of the found principal components, with magnitudes proportional to the corresponding eignevalues times a random variable drawn from a Gaussian with mean zero and standard deviation 0.1". The PCA color augmentation strengthens or weakens the color feature of the image, while it keeps the patten and distribution of the training image. In addition, I implemented a **multithread data loading pipeline** which does the PCA color augmentation for the next mini-batches of training data by a CPU thread, and in the meantime let GPU thread execute the training. Namely, no additional compuation cost on GPU is added, so the training time is not increased due to data augmentation. The pipeline is like this: training data loading(CPU) -> PCA color augmentation(CPU) -> Enqueue(CPU) -> Dequeue(CPU) -> Train model(GPU)
 
 **Original image**
 
@@ -143,7 +143,7 @@ Roughly, **Residual module** consists of the following layers:
 | Optimizer     	          | Adam                                          |
 | Learning rate       	    | 1e-3                                      	   |
 | Regularization scale     | 1e-3 ~ 5e-2                                   |
-| Dropout rate             | 0.5 (added by me, not mentioned in the paper) |
+| Dropout rate             | 0.5         |
 | Batch size               | 64                                            |
 | Learning rate decay rate | 0.95 (decay after every epoch)                |
 | Epochs                   | 100                                           |
@@ -180,12 +180,11 @@ I also tried to implement an Inception net, but did not find a proper one for th
 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are five Belgium traffic signs that I found on the web, but they are similar to the German ones:
 
 ![alt text][image4] ![alt text][image5] ![alt text][image6] 
 ![alt text][image7] ![alt text][image8]
 
-The first image might be difficult to classify because ...
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
