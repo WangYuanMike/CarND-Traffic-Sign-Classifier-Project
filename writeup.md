@@ -39,12 +39,18 @@ You're reading it!
 
 I have implemented LeNet, ResNet, and Inception net for this project, but I did not find a stable Inception net architecture for this project, therefore here I only list the project code link and test result with various data pre-processing and data augmentation combinations for LeNet and ResNet. Please be caustious that you need Tensorflow 1.3 to run them.
 
-| NN model type | Data pre-processing | Data augmentation | Project Code	| Training accuracy | Validation accuracy | Test accuracy |
-|:-------------:|:-------------------:|:-----------------:|:------------:|:-----------------:|:-------------------:|:-------------:| 
-| LeNet | No | PCA color augmentation | [LeNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/51cc84db07623d89c549121c23b75f856edc2248/Traffic_Sign_Classifier.ipynb)	| 99.4% | 97.5% | 95.6% |
-| LeNet | Input normalization | PCA color augmentation | [LeNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/444ed68f5feba08c2fdc21bc0d1bef69bc209b7c/Traffic_Sign_Classifier.ipynb)	| 99.4% | 97.9% | 95.1% |
-| ResNet | No | PCA color augmentation | [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb)	| 99.8% | 98.5% | 97.6% |
-| ResNet | Input Normalization | PCA color augmentation | [ResNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/afac1af269188e5fa60c6d8ab50477469f663851/Traffic_Sign_Classifier.ipynb)	| 99.8% | 98.6% | 98.0% |
+| NN model type | Data pre-processing | Data augmentation | Project Code | html	| Training accuracy | Validation accuracy | Test accuracy |
+|:-------------:|:-------------------:|:-----------------:|:------------:|:--------:|:---------:|:-------------------:|:-------------:| 
+| LeNet | No | PCA color augmentation | [LeNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/51cc84db07623d89c549121c23b75f856edc2248/Traffic_Sign_Classifier.ipynb)	| [html](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/LeNet_with_PCA.html)	| 99.4% | 97.5% | 95.6% |
+| LeNet | Input normalization | PCA color augmentation | [LeNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/444ed68f5feba08c2fdc21bc0d1bef69bc209b7c/Traffic_Sign_Classifier.ipynb)	| [html](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/LeNet_with_PCA_and_Normalization.html)	| 99.4% | 97.9% | 95.1% |
+| ResNet | No | PCA color augmentation | [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb)	|[html](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/ResNet_with_PCA.html)	| 99.8% | 98.5% | 97.6% |
+| ResNet | Input Normalization | PCA color augmentation | [ResNet with PCA and Normalization](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/afac1af269188e5fa60c6d8ab50477469f663851/Traffic_Sign_Classifier.ipynb)	|[html](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/ResNet_with_PCA_and_Normalization.html)	| 99.8% | 98.6% | 98.0% |
+
+You may not be able to open these html links directly in github because they are too big to show. Alternatively, you can clone this git repository and then you can view these four html files on your desktop.
+* LeNet_with_PCA.html
+* LeNet_with_PCA_and_Normalization.html
+* ResNet_with_PCA.html
+* ResNet_with_PCA_and_Normalization.html
 
 BTW, I also implemented a [LeNet in Tensorflow 0.12](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb). It just passes the validation accuracy requirement of the project rubrics, and I did not pay as much attention on it as on the other ones listed in the table above. This project report is also a summary of the ones in the table instead of the basic LeNet implememented in Tensorflow 0.12.
 
