@@ -20,9 +20,12 @@ The goals / steps of this project are the following:
 [image3]: ./examples/test_distribution.png "test distribution"
 [image4]: ./examples/original.png "original image"
 [image5]: ./examples/pca.png "pca augmented image"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image6]: ./examples/new_image.png "new image"
+[image7]: ./examples/new_image_prediction.png "new image prediction"
+[image8]: ./examples/truck.png "truck"
+[image9]: ./examples/convolution.png "convolution"
+[image10]: ./examples/pooling.png "pooling"
+
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -170,7 +173,7 @@ My best final model results were:
 The LeNet model suggested in Udacity lecture is actually working pretty well. It trained pretty fast. On AWS GPU instance, it usually takes 4 seconds to go through one epoch of training data. While the cons of the model is that it is not very good at resist overfitting. If I choose a moderate dropout rate, e.g. 0.5, with a moderate L2 regularization scale, e.g. 3e-2, it would finally converges to the result you see in the table above. And if I choose a more aggressive dropout rate, e.g. 0.7, then the training rate will drop to 97%, and the validation and test rate will not exceed it as well. And also normalization and PCA could not really help a lot on mitigating the overfitting issue. The other problem of this model is that it is not generalized so well (which is also a symptom of overfitting), in the 5 new image test section, I usually got 80% accuracy, althought the test accuracy is approximately 95%.
 
 **ResNet summary:**
-So I tried the ResNet, because it is the most famous one right now. At first I tried the shallow network version mentioned in the [ResNet paper](https://arxiv.org/pdf/1512.03385.pdf). Then I got even more overfitting than LeNet, so I tried to add a dropout layer with dropout rate 0.5 in each Residual module. Then the test result became pretty good. The training time is problem of this ResNet model, whose training time per epoch is about 28 seconds, almost 7 times of LeNet's. But in the end, it raises test accuracy for about 3%, and it always get 100% on the 5 new images test.
+So I tried the ResNet, because it is one of the most famous CNN models right now. At first I tried the shallow network version mentioned in the [ResNet paper](https://arxiv.org/pdf/1512.03385.pdf). Then I got even more overfitting than LeNet, so I tried to add a dropout layer with dropout rate 0.5 in each Residual module. Then the test result became pretty good. The training time is problem of this ResNet model, whose training time per epoch is about 28 seconds, almost 7 times of LeNet's. But in the end, it raises test accuracy for about 3%, and it always get 100% on the 5 new images test.
 
 **Inception net summary:**
 I also tried to implement an Inception net, but did not find a proper one for this task, either overfitting or underfitting. If you have interest, you can have a look at my raw [Inception net model](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/Inception-tf-1.3/Traffic_Sign_Classifier.ipynb).
@@ -182,43 +185,42 @@ I also tried to implement an Inception net, but did not find a proper one for th
 
 Here are five Belgium traffic signs that I found on the web, but they are similar to the German ones:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image6]
 
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| speed limit 70      		| speed limit 70   									| 
+| priority road     			| priority road 										|
+| Roundabout mandatory					| Roundabout mandatory											|
+| No vehicles	      		| No vehicles						 				|
+| Yield			| Yield     							|
 
+I think **Roundabout mandatory** may have a problem to recognize, because there are some flowers under the sign. And the **Yield** may also be hard, because the image is not very clear. But sometimes I see models mistakenly recognized the **speed limit 70** to speed limit 20 or 30. But finally the model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of **100%**. 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+This is copied from [ResNet with PCA](https://github.com/WangYuanMike/CarND-Traffic-Sign-Classifier-Project/blob/46cceb25527c6c3f4762f00d85c6efe511c23d22/Traffic_Sign_Classifier.ipynb).
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
-
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
-
-
-For the second image ... 
+![alt text][image7]
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
+Original image:
+
+![alt text][image8]
+
+Convolution output:
+
+![alt text][image9]
+
+Max pooling output:
+![alt text][image10]
+
+This [paper](https://arxiv.org/pdf/1506.03767.pdf) talks about using FFT to transform images from spatial domain to frequency domain, and do convolution and pooling on frequency domain, which maybe more efficient for compuation and could save more information when pooling. According to the author, the main problem of the frequency domain approach is that so far no proper non-linear function has been found on frequency domain, therefore the E2E training must be switched back and force between spatical and frequency domains. But it sounds to me a good entry point for improving CNN theory in the future.
 
