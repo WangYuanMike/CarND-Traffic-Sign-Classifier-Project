@@ -220,7 +220,10 @@ Convolution output:
 ![alt text][image9]
 
 Max pooling output:
+
 ![alt text][image10]
 
-This [paper](https://arxiv.org/pdf/1506.03767.pdf) talks about using FFT to transform images from spatial domain to frequency domain, and do convolution and pooling on frequency domain, which maybe more efficient for compuation and could save more information when pooling. According to the author, the main problem of the frequency domain approach is that so far no proper non-linear function has been found on frequency domain, therefore the E2E training must be switched back and force between spatical and frequency domains. But it sounds to me a good entry point for improving CNN theory in the future.
+The convolution layer basically retrieves some low level features from the orignal image, and actually this is the essense of CNN, because origianlly feature retrieval should be done based on human experience, while CNN simply define some random filter weights and biases, and gradually train them to be the proper feature extractor for image recognition task, making "feature engineering" automatic as well. 
+
+The pooling layer makes the features blur, because it simply choose one of the four neighbour pixels as the representative of their group, but it still keeps the major info of the original image and features. This [paper](https://arxiv.org/pdf/1506.03767.pdf) talks about using FFT to transform images from spatial domain to frequency domain, and do convolution and pooling on frequency domain, which maybe more efficient for compuation and could save more information when pooling. According to the author, the main problem of the frequency domain approach is that so far no proper non-linear function has been found on frequency domain, therefore the E2E training must be switched back and force between spatical and frequency domains. But it sounds to me a good entry point for improving CNN theory in the future.
 
